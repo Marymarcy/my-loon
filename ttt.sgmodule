@@ -1,16 +1,37 @@
-#!name=汤头条——解锁VIP与金币视频
-#!desc=作者：彭于晏💞 | 完美适配 Surge 模块语法。自动拦截广告并重写响应体解锁 VIP/金币视频，无报错。
-
-[MITM]
-hostname = %APPEND% p1.ceogberj.cc, *.ceogberj.cc, api3.caanrrim.cc, *.caanrrim.cc, new.iajckz.cn, *.iajckz.cn, tp5.iajckz.cn, tp6.iajckz.cn, tp7.iajckz.cn, *.wpyxbxt.cn, *.fipxor.cn
-
-https://ahrefs.com/writing-tools/paragraph-rewriter
-# 拦截拦截各类垃圾广告和上报接口
-^https?:\/\/ap\.dc-report\.cc\/ - reject
-^https?:\/\/api-dc-prod-002\.cyou\/ - reject
-^https?:\/\/api-dc2-prod-02\.cyou\/ - reject
-^https?:\/\/[^\/]+\/upload_01\/ads\/ - reject
+# ============================================
+# 汤头条——解锁—金币视频—VIP视频（Surge版）
+# 脚本作者：彭于晏💞
+# 更新时间：2026-5-25
+# TG反馈群：https://t.me/plus8889
+# TG频道群：https://t.me/py996
+# ============================================
 
 [Script]
-# 核心解锁核心：修改 PWA 网页端及客户端 API 响应体数据，解除金币与VIP限制
-汤头条核心解锁 = type=http-response, pattern=^https?:\/\/[^\/]+\/pwa\.php\/api\/, script-path=https://raw.githubusercontent.com/89996462/Quantumult-X/main/ghs/hjsq-pwa-noad.js, requires-body=true, max-size=0, timeout=10
+
+# 捕获 m3u8 请求头
+汤头条-m3u8 = type=http-request,pattern=^https:\/\/[^\/]*\..*\.cn\/\w+\/[a-z0-9]{32}\/[a-z0-9]{32}\.m3u8(\?.*)?,script-path=https://raw.githubusercontent.com/89996462/Quantumult-X/main/ghs/ttt.js
+
+# 处理 PWA 接口（去广告/解析）
+汤头条-pwa = type=http-response,pattern=^https?:\/\/[^\/]+\/pwa\.php\/api\/,script-path=https://raw.githubusercontent.com/89996462/Quantumult-X/main/ghs/hjsq-pwa-noad.js,requires-body=true
+
+# ============================================
+
+[Rule]
+
+# 广告/统计拦截
+DOMAIN-SUFFIX,dc-report.cc,REJECT
+DOMAIN-SUFFIX,cyou,REJECT
+DOMAIN-SUFFIX,iajckz.cn,REJECT
+DOMAIN-SUFFIX,fipxor.cn,REJECT
+
+# 精确匹配拦截
+URL-REGEX,^https?:\/\/ap\.dc-report\.cc\/,REJECT
+URL-REGEX,^https?:\/\/api-dc-prod-002\.cyou\/,REJECT
+URL-REGEX,^https?:\/\/api-dc2-prod-02\.cyou\/,REJECT
+URL-REGEX,^https?:\/\/[^\/]+\/upload_01\/ads\/,REJECT
+
+# ============================================
+
+[MITM]
+
+hostname = %APPEND% p1.ceogberj.cc,*.ceogberj.cc,api3.caanrrim.cc,*.caanrrim.cc,new.iajckz.cn,*.iajckz.cn,tp5.iajckz.cn,tp6.iajckz.cn,tp7.iajckz.cn,120play.*.cn,long.*.cn,*.wpyxbxt.cn,h5play.*.com,*.fipxor.cn
