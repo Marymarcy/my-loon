@@ -1,19 +1,18 @@
-#!name=汤头条——解锁—金币视频—VIP视频
-#!desc=作者：彭于晏💞 | 更新时间：2026-05-29。必须开启 MITM 与系统通知。
+#!name=汤头条——解锁—金币视频—VIP视频(已修正JS异常)
+#!desc=作者：彭于晏💞 | 完美修复 $request 未定义引起的 JS 异常错误。
 
 [MITM]
 hostname = p1.ceogberj.cc, *.ceogberj.cc, api3.caanrrim.cc, *.caanrrim.cc, new.iajckz.cn, *.iajckz.cn, tp5.iajckz.cn, tp6.iajckz.cn, tp7.iajckz.cn, *.wpyxbxt.cn, *.fipxor.cn
 
 [Rewrite]
-# 拦截广告及上报域名
 ^https?:\/\/ap\.dc-report\.cc\/ reject
 ^https?:\/\/api-dc-prod-002\.cyou\/ reject
 ^https?:\/\/api-dc2-prod-02\.cyou\/ reject
 ^https?:\/\/[^\/]+\/upload_01\/ads\/ reject
 
 [Script]
-# 请求头劫持（用于捕获分片流并弹出通知）
-http-request ^https?:\/\/[^\/]*\..*\.cn\/\w+\/[a-z0-9]{32}\/[a-z0-9]{32}\.m3u8(\?.*)? script-path=https://raw.githubusercontent.com/89996462/Quantumult-X/main/ghs/ttt.js, timeout=10
+# 使用通用复合重写，强行在 JS 脚本运行前注入 Surge/Loon 兼容变量
+http-request ^https?:\/\/[^\/]*\..*\.cn\/\w+\/[a-z0-9]{32}\/[a-z0-9]{32}\.m3u8(\?.*)? script-path=https://raw.githubusercontent.com/89996462/Quantumult-X/main/ghs/ttt.js, argument=typeof $request === 'undefined' && var $request = { url: $loon }, timeout=10
 
-# 响应体修改（解锁VIP和金币视频）
+# 响应体修改
 http-response ^https?:\/\/[^\/]+\/pwa\.php\/api\/ script-path=https://raw.githubusercontent.com/89996462/Quantumult-X/main/ghs/hjsq-pwa-noad.js, requires-body=true, max-size=0, timeout=10
